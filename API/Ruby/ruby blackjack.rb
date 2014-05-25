@@ -32,6 +32,7 @@
 
 =end
 
+if __FILE__ == $0
 
 require "./hand"
 require "./deck"
@@ -39,77 +40,87 @@ require "./card"
 require "./player"
 require "./game"
 
+	# simulates blackjack on the command line.
+	class BlackJack
+		Deck = Deck.new
+		Player1 = Player.new("Player 1")
+		Dealer = Player.new("Dealer")
+		@Playing = true
 
+		#gameloop
+		def Run
+			puts "Welcome to BlackJack"
+			while true do
+				puts "In the loop"
+				#deal cards
+				Player1.Hand.Cards.push(Deck.Deal(),Deck.Deal())
+				Dealer.Hand.Cards.push(Deck.Deal(),Deck.Deal())
+				#resolve insurance or black jack
 
+				#allow player to play
+				puts "#{Dealer.Name} is showing #{Dealer.Hand.Cards[0].Rank} of #{Dealer.Hand.Cards[0].Suit}"
+				while Player1.Hand.Value <= 21 do
+					puts "Your total is #{Player1.Hand.Value}, would you like to Hit or Stand?"
+					input = gets.chomp()
+					if input[0].upcase == "S"
+						puts "You stand on #{Player1.Hand.Value}"
+						puts #adds another new line
+						break;
+					end
+					c = Deck.Deal
+					puts "Hit gets #{c}"
+					Player1.Hand.Cards.push(c)
+			
+					if Player1.Hand.Value > 21
+						puts "\033[34mBusted!!!\033[0m"
+					end
+				end
 
-
-
-class BlackJack
-	attr_accessor :Hand, :Deck
-	def initialize
-		
-		@Hand = Array.new
-		@Deck = Deck.new
-	end
-
-	def total
-		accum = 0
-		for card in @Hand 
-			accum += card.Value
-		end
-		return accum
-	end
-
-	def Run
-		#only create 1 hand
-		@Hand.push(@Deck.Deal(),@Deck.Deal())
-		#@Hand.push(Card.new_using_Rank(Card.Ranks[0], Card.Suits[0]), Card.new_using_Rank(Card.Ranks[0], Card.Suits[0]))
-		puts "Total is #{total}"
-
-
-		while true do
-			puts "Hit or stand"
-
-			if gets[0].upcase == 'H'
-				puts "Hit!"
-				c = @Deck.Deal()
-				puts "#{c.Rank} of #{c.Suit}"
-				@Hand.push(c)
-			else
-				puts "Standing!"
-				break;
-			end
-
-
-			if(IsBusted?(@Hand))
-				#shamelessly stolen from http://stackoverflow.com/questions/1489183/colorized-ruby-output
+				if  Player1.Hand.Value <= 21
+				#allow dealer to play
+					puts "#{Dealer.Name} reveals #{Dealer.Hand.Cards[1].Rank} of #{Dealer.Hand.Cards[1].Suit}"
+					while Dealer.Hand.Value <17 do
+						c = Deck.Deal
+						Dealer.Hand.Cards.push(c)
+						puts "#{Dealer.Name} hits and gets #{c}"
+						puts "#{Dealer.Name} shows #{Dealer.Hand.Value}"
+						
+						if(Dealer.Hand.Value >21)
+							puts "#{Dealer.Name} \033[34mBusted!!!\033[0m. #{Player1.Name} Wins!!"
+							@Playing = false
+							break;
+						end
+					end
+				end
 				
-				puts "\e[31mBusted!!\e[0m  Total is #{total}"
-				break;
+				if(Dealer.Hand.Value < 22 && Player1.Hand.Value < 22)
+					puts "#{Dealer.Name} stands"
+					winner = (Dealer.Hand.Value > Player1.Hand.Value ? Dealer : Player1)
+					puts "#{winner.Name} Wins!"
+					puts ""
+				end
+				puts "Would you like to play again?"
+				input = gets.chomp[0].upcase
+				if input != "Y"
+					break
+				else
+					Player1.ClearHands
+					Dealer.ClearHands
+				end
 			end
-
-			puts "Total is #{total}"
-
+			puts "Thanks for Playing!"
+			return nil
 		end
 	end
 
-	def self.IsBusted?(hand)
-		hand.each do |c| 
-		 c.Value = c.AltValue
-			if(total <= 21)
-				break
-			end
-		end
-		return total > 21
-	end
+
+	bj = BlackJack.new
+	bj.Run()
+#
+#	# player = Player.new("ballz")
+#	# deck = Deck.new
+#	# crd1 = Card.new_using_Rank(Card.Ranks[0],Card.Suits[0])
+#	# crd2 = Card.new_using_Rank(Card.Ranks[0],Card.Suits[0])
+#	# player.Hand.Cards.push(crd1,crd2)
+#	# puts player.Hand.Value()
 end
-
-bj = BlackJack.new
-#bj.Run()
-
-player = Player.new("ballz")
-deck = Deck.new
-crd1 = Card.new_using_Rank(Card.Ranks[0],Card.Suits[0])
-crd2 = Card.new_using_Rank(Card.Ranks[0],Card.Suits[0])
-player.Hand.Cards.push(crd1,crd2)
-puts player.Hand.Value()

@@ -1,3 +1,4 @@
+
 class Card
 	@@Ranks =  [{Rank: "Ace", 	Value: 11, 	AltValue: 1},
 				{Rank: "King", 	Value: 10, 	AltValue: 10},

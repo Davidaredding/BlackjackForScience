@@ -1,10 +1,14 @@
 
 class Hand
 	attr_accessor :Cards
-	attr_reader :Value
+	attr_reader :Value, :Busted
+
 
 	def initialize
 		@Cards = Array.new
+	end
+	def Clear
+		@Cards.clear
 	end
 
 	#gets highest possible value without going over 21
@@ -20,4 +24,6 @@ class Hand
 		end
 		return val.call
 	end
+
+	
 end
