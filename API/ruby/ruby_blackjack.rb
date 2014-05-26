@@ -32,13 +32,15 @@
 
 =end
 
-if __FILE__ == $0
 
-require "./hand"
-require "./deck"
-require "./card"
-require "./player"
-require "./game"
+
+require_relative "./ruby_blackjack/hand"
+require_relative "./ruby_blackjack/deck"
+require_relative "./ruby_blackjack/card"
+require_relative "./ruby_blackjack/player"
+
+
+
 
 	# simulates blackjack on the command line.
 	class BlackJack
@@ -113,6 +115,7 @@ require "./game"
 		end
 	end
 
+if __FILE__ == $0
 
 	bj = BlackJack.new
 	bj.Run()
