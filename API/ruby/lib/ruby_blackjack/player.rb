@@ -12,5 +12,9 @@ class Player
 		@SplitHand.Cards.clear
 	end
 
+	def to_json
+		return "{\"hand\" : #{@Hand.to_json}, \"name\" : \"#{@Name}\"}"
+	end
+
 
 end

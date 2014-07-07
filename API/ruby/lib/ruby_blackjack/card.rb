@@ -1,3 +1,4 @@
+require "json"
 
 class Card
 	@@Ranks =  [{Rank: "Ace", 	Value: 11, 	AltValue: 1},
@@ -46,5 +47,16 @@ class Card
 
 	def to_s
 		return "#{@Rank} of #{@Suit}, value of #{@Value}, alternative value of #{@AltValue}"
+	end
+
+	def to_json
+		puts "hello"
+		return 
+			{
+				"rank" => @Rank,
+				"suit" => @Suit,
+				"value" => @Value,
+				"altValue" =>@AltValue
+			}.to_json
 	end
 end

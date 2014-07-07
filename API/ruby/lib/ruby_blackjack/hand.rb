@@ -1,7 +1,7 @@
 
 class Hand
 	attr_accessor :Cards
-	attr_reader :Value, :Busted
+	attr_reader :Value
 
 
 	def initialize
@@ -25,5 +25,7 @@ class Hand
 		return val.call
 	end
 
-	
+	def to_json
+		return "{\"cards\" : #{(@Cards.map { |c| c.to_json }).to_json}, \"value\" : #{Value()} }"
+	end
 end
